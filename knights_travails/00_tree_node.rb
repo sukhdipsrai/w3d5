@@ -86,10 +86,10 @@ class PolyTreeNode
 
 end
 
-tree = PolyTreeNode.new("a")
-b = PolyTreeNode.new("b")
-c = PolyTreeNode.new("c")
-tree.add_child(b)
-tree.add_child(c)
+# tree = PolyTreeNode.new("a")
+# b = PolyTreeNode.new("b")
+# c = PolyTreeNode.new("c")
+# tree.add_child(b)
+# tree.add_child(c)
 
-p PolyTreeNode.trace_path_back(c)
+# p PolyTreeNode.trace_path_back(c)

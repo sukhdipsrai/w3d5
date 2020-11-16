@@ -6,8 +6,6 @@ class KnightPathFinder
         @root_node = PolyTreeNode.new(start_pos)
         @considered_positions = [start_pos]
         @board = Array.new(8) {Array.new(8, 0)}
-        build_move_tree(@root_node)
-
     end
 
     # upto 8 possible moves, from pos return arr of valid knights moves
@@ -41,34 +39,49 @@ class KnightPathFinder
         p @root_node.children.map {|child| p child.value}
     end
 
-    # build the whole tree , implementing depth first
-    def build_move_tree(parent)
-        # queue 
-        # queue = []
-        @considered_positions = trace_path_back(parent)
-        new_pos = new_move_positions(parent.value)
-        # base case 
-        if new_pos.empty? 
-            return nil
-        end
-        new_pos.each do |pos|
-            # children << PolyTreeNode.new(pos)
-            parent.add_child(PolyTreeNode.new(pos))
-            # PolyTreeNode.new(pos).parent=parent
-        end
-        parent.children.each do |child_nodes|
+    # # build the whole tree , implementing depth first
+    # def build_move_tree(parent)
+    #     @considered_positions = trace_path_back(parent)
+    #     new_pos = new_move_positions(parent.value)
 
-            # @considered_positions = [@root_node.value]
-            # no recursion
-            build_move_tree(child_nodes)
-            
+    #     # base case 
+    #     if new_pos.empty? 
+    #         return nil
+    #     end
+
+    #     new_pos.each do |pos|
+    #         parent.add_child(PolyTreeNode.new(pos))
+    #     end
+ 
+    #     parent.children.each do |child_nodes|
+    #         build_move_tree(child_nodes)
+    #     end
+    #     # recursive call here
+    # end
+
+    # using breadth-first
+    def build_move_tree (target_value)
+        queue = [@root_node]
+
+        while !queue.empty?
+            first = queue.shift
+            @considered_positions = trace_path_back(first)
+            new_pos = new_move_positions(first.value)
+            new_pos.each { |pos| first.add_child(PolyTreeNode.new(pos)) }
+            # p "parent is #{first.value}"
+            # p first.children.map {|ele| ele.value}
+            return first if (first.value == target_value) 
+            first.children.each { |child| queue << child}
         end
-        # recursive call here
+
     end
 
+
+
     def find_path(end_pos)
-        target_node = @root_node.bfs(end_pos)
-        trace_path_back(target_node)
+        ans = build_move_tree(end_pos)
+        # target_node = @root_node.bfs(end_pos)
+        return trace_path_back(ans)
     end
 
 
@@ -87,24 +100,21 @@ class KnightPathFinder
 
 
     def trace_path_back(node)
-        output = [@root_node.value, node.value]
-        par = node.parent
-        while par != @root_node && par != nil
-            p "hello"
-            output << par.value 
+        output = []
+        par = node
+        while par != nil
+            output = [par.value] + output 
             par = par.parent 
-
         end
-
+        # p output
         return output 
     end
-    
 end
 
 kpf = KnightPathFinder.new([0, 0])
 
 # kpf.print
-# p kpf.find_path([7, 6]) # => [[0, 0], [1, 2], [2, 4], [3, 6], [5, 5], [7, 6]]
+ p kpf.find_path([7, 6]) # => [[0, 0], [1, 2], [2, 4], [3, 6], [5, 5], [7, 6]]
 # p KnightPathFinder.valid_moves([5,5])
 # kpf.find_path([6, 2]) # => [[0, 0], [1, 2], [2, 0], [4, 1], [6, 2]]
 
