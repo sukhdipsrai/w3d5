@@ -73,4 +73,23 @@ class PolyTreeNode
     end
 
 
+    def self.trace_path_back(node)
+        output = [node.value]
+        par = node.parent
+        while par != nil 
+            output << par.value
+            par = par.parent 
+
+        end
+        return output 
+    end
+
 end
+
+tree = PolyTreeNode.new("a")
+b = PolyTreeNode.new("b")
+c = PolyTreeNode.new("c")
+tree.add_child(b)
+tree.add_child(c)
+
+p PolyTreeNode.trace_path_back(c)

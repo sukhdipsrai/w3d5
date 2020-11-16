@@ -69,7 +69,7 @@ class PolyTreeNode
 
     def bfs(target_value)
         queue = [self]
-        p target_value
+        # p target_value
         while !queue.empty?
            #p queue.map{|ele| ele.value} 
             first_node = queue.shift()
@@ -83,5 +83,28 @@ class PolyTreeNode
         nil
     end
 
+    def self.trace_path_back(node)
+        output = [node.value]
+        par = node.parent
+        p "here"
+        while par != nil 
+            p "hello"
+            output.unshift(par.value)
+            par = par.parent 
+
+        end
+        return output 
+    end
+
 
 end
+
+
+tree = PolyTreeNode.new("a")
+b = PolyTreeNode.new("b")
+c = PolyTreeNode.new("c")
+tree.add_child(b)
+tree.add_child(c)
+
+p "dfwfwfe"
+p PolyTreeNode.trace_path_back(c)
